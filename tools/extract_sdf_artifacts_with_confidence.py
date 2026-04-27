@@ -1,224 +1,366 @@
+#!/usr/bin/env python3
+"""
+SDF Heuristic Extractor & Documentation Generator (Macro-Prefix Aware)
+---------------------------------------------------------------------
+
+Purpose
+-------
+Best-effort, read-only extraction of documentation-relevant information
+from LIN SessionConf SDF files.
+
+Key Design Points
+-----------------
+- This tool is NOT a binary SDF decoder.
+- It relies on printable strings and naming conventions.
+- The macro_ prefix is treated as an authoritative signal.
+- Confidence is explicit: HIGH / MEDIUM / LOW.
+- Output is for documentation, review, and CI – not execution.
+
+Generated outputs
+-----------------
+- sdf_links.csv                (machine/CI readable)
+- section_*.md                 (engineer readable)
+- sdf_extraction_report.html   (reviewer readable, includes GUI view)
+"""
+
 import re
 import sys
 import csv
 from pathlib import Path
-from collections import defaultdict
+from collections import Counter
 
-# ---------------- Helpers ----------------
+# =====================================================================
+# PROJECT CONFIGURATION
+# =====================================================================
 
-def extract_strings(blob, min_len=4):
+# Explicit macro naming convention used in the SDF
+MACRO_PREFIX = "macro_"
+
+# Enable fallback heuristic detection for legacy macros
+ALLOW_FALLBACK_MACROS = False  # set True only if needed
+
+# GUI keywords to avoid false macro detection
+GUI_HINTS = [
+    "button", "btn", "menu", "panel",
+    "slider", "checkbox", "check", "click", "press"
+]
+
+# =====================================================================
+# STRING EXTRACTION
+# =====================================================================
+
+def extract_strings(binary_blob, min_len=4):
+    """
+    Extract printable ASCII strings from binary data.
+    This is the foundation of all heuristic analysis.
+    """
+    pattern = rb"[ -~]{%d,}" % min_len
     return [
         s.decode("ascii", errors="ignore")
-        for s in re.findall(rb"[ -~]{%d,}" % min_len, blob)
+        for s in re.findall(pattern, binary_blob)
     ]
 
-def classify(strings):
-    macros, events, signals = set(), set(), set()
+# =====================================================================
+# MACRO DETECTION LOGIC
+# =====================================================================
+
+def looks_like_legacy_macro(name: str) -> bool:
+    """
+    Heuristic fallback for legacy macros (optional).
+    Used only if ALLOW_FALLBACK_MACROS is enabled.
+    """
+    if any(h in name.lower() for h in GUI_HINTS):
+        return False
+
+    patterns = [
+        r"^[A-Z][A-Za-z0-9_]{4,}$",   # PascalCase
+        r"^[A-Z0-9_]{5,}$",           # UPPER_SNAKE_CASE
+    ]
+    return any(re.match(p, name) for p in patterns)
+
+def is_macro_name(name: str) -> bool:
+    """
+    Determine whether a string represents a macro name.
+    Priority:
+      1. macro_ prefix (authoritative, HIGH confidence)
+      2. fallback heuristic (optional, lower confidence)
+    """
+    if name.startswith(MACRO_PREFIX):
+        return True
+
+    if ALLOW_FALLBACK_MACROS and looks_like_legacy_macro(name):
+        return True
+
+    return False
+
+def macro_base_confidence(name: str) -> str:
+    """
+    Base confidence purely from naming convention.
+    """
+    if name.startswith(MACRO_PREFIX):
+        return "HIGH"
+    return "MEDIUM"
+
+# =====================================================================
+# SECTION CLASSIFICATION
+# =====================================================================
+
+def classify_sections(strings):
+    """
+    Classify extracted strings into logical SDF sections.
+    """
+    sections = {
+        "metadata": set(),
+        "macros": set(),
+        "events": set(),
+        "signals": set(),
+        "gui": set(),
+    }
+
     for s in strings:
         sl = s.lower()
-        if "macro" in sl and s.isidentifier():
-            macros.add(s)
-        elif any(k in sl for k in ["event", "startup", "power", "ignition"]):
-            events.add(s)
-        elif s.isupper() and 2 < len(s) < 32:
-            signals.add(s)
-    return sorted(macros), sorted(events), sorted(signals)
 
-def confidence(s, m=None, e=None, sig=None):
-    if m and e and m in s and e in s:
-        return "HIGH", "Same string"
-    if (m and m in s) or (e and e in s):
-        return "MEDIUM", "Near reference"
-    if sig and sig in s:
-        return "MEDIUM", "Signal proximity"
-    return "LOW", "Global occurrence"
+        # Metadata
+        if any(k in sl for k in ["version", "project", "build", "author"]):
+            sections["metadata"].add(s)
+            continue
 
+        # Macros (prefix-first)
+        if is_macro_name(s):
+            sections["macros"].add(s)
+            continue
 
-def generate_html_report(output_dir, sdf_name, macros, events, signals, links):
+        # Events
+        if any(k in sl for k in ["event", "startup", "power", "ignition"]):
+            sections["events"].add(s)
+            continue
+
+        # Signals
+        if s.isupper() and 2 < len(s) < 32:
+            sections["signals"].add(s)
+            continue
+
+        # GUI elements
+        if any(k in sl for k in GUI_HINTS + ["gui"]):
+            sections["gui"].add(s)
+            continue
+
+    return sections
+
+# =====================================================================
+# CONFIDENCE UTILS
+# =====================================================================
+
+CONF_RANK = {"LOW": 0, "MEDIUM": 1, "HIGH": 2}
+
+def upgrade_confidence(a, b):
+    """Return the stronger of two confidence levels."""
+    return a if CONF_RANK[a] >= CONF_RANK[b] else b
+
+def proximity_confidence(text, *tokens):
+    """
+    Determine confidence from textual proximity.
+    """
+    hits = [t for t in tokens if t and t in text]
+    if len(hits) == len(tokens):
+        return "HIGH"
+    if len(hits) >= 2:
+        return "MEDIUM"
+    return "LOW"
+
+# =====================================================================
+# RELATIONSHIP EXTRACTION
+# =====================================================================
+
+def extract_links(strings, sections):
+    """
+    Extract macro-event-signal-gui relationships with confidence.
+    """
+    links = []
+
+    # Frequency tracking (reinforces confidence)
+    macro_hits = Counter()
+    for line in strings:
+        for m in sections["macros"]:
+            if m in line:
+                macro_hits[m] += 1
+
+    for line in strings:
+        # Macro ↔ Event ↔ Signal
+        for m in sections["macros"]:
+            for e in sections["events"]:
+                for s in sections["signals"]:
+                    prox = proximity_confidence(line, m, e, s)
+                    if prox == "LOW":
+                        continue
+
+                    conf = upgrade_confidence(
+                        macro_base_confidence(m),
+                        prox
+                    )
+
+                    links.append({
+                        "macro": m,
+                        "event": e,
+                        "signal": s,
+                        "gui": "",
+                        "confidence": conf,
+                        "context": "Macro/Event/Signal proximity"
+                    })
+
+        # GUI ↔ Macro (project-safe because of prefix)
+        for gui in sections["gui"]:
+            for m in sections["macros"]:
+                prox = proximity_confidence(line, gui, m)
+                if prox == "LOW":
+                    continue
+
+                conf = upgrade_confidence(
+                    macro_base_confidence(m),
+                    prox
+                )
+
+                links.append({
+                    "macro": m,
+                    "event": "",
+                    "signal": "",
+                    "gui": gui,
+                    "confidence": conf,
+                    "context": "GUI triggers macro"
+                })
+
+    return links
+
+# =====================================================================
+# OUTPUT: CSV
+# =====================================================================
+
+def write_csv(out_dir, links):
+    csv_path = out_dir / "sdf_links.csv"
+    with csv_path.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(
+            f,
+            fieldnames=["macro", "event", "signal", "gui", "confidence", "context"]
+        )
+        writer.writeheader()
+        for l in links:
+            writer.writerow(l)
+
+# =====================================================================
+# OUTPUT: MARKDOWN
+# =====================================================================
+
+def write_section_markdown(out_dir, sections, sdf_name):
+    for section, items in sections.items():
+        md = out_dir / f"section_{section}.md"
+        with md.open("w", encoding="utf-8") as f:
+            f.write(f"# {section.upper()} SECTION\n\n")
+            f.write(f"Extracted from: `{sdf_name}`\n\n")
+            for i in sorted(items):
+                f.write(f"- {i}\n")
+
+# =====================================================================
+# OUTPUT: HTML REPORT (WITH GUI VIEW)
+# =====================================================================
+
+def generate_html_report(out_dir, sdf_name, sections, links):
+    def cls(c): return f"conf-{c}"
+
     html = f"""<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>SDF Extraction Report – {sdf_name}</title>
 <style>
-body {{
-  font-family: Arial, sans-serif;
-  margin: 20px;
-}}
-h1, h2, h3 {{
-  color: #333;
-}}
-table {{
-  border-collapse: collapse;
-  width: 100%;
-  margin-bottom: 20px;
-}}
-th, td {{
-  border: 1px solid #ccc;
-  padding: 6px 8px;
-  text-align: left;
-}}
-th {{
-  background-color: #f2f2f2;
-}}
+body {{ font-family: Arial, sans-serif; margin: 20px; }}
+table {{ border-collapse: collapse; width: 100%; margin-bottom: 25px; }}
+th, td {{ border: 1px solid #ccc; padding: 6px; }}
+th {{ background-color: #f0f0f0; }}
 .conf-HIGH {{ background-color: #d4edda; }}
 .conf-MEDIUM {{ background-color: #fff3cd; }}
 .conf-LOW {{ background-color: #f8d7da; }}
-.small {{
-  font-size: 0.9em;
-  color: #555;
-}}
+.small {{ font-size: 0.9em; color: #555; }}
 </style>
 </head>
 <body>
 
 <h1>SDF Extraction Report</h1>
 <p class="small">
-File: <strong>{sdf_name}</strong><br>
-Generated automatically – verify LOW / MEDIUM confidence items in SessionConf.
+Source: <b>{sdf_name}</b><br>
+macro_ prefix is treated as authoritative.
 </p>
 
 <h2>Overview</h2>
 <ul>
-  <li>Macros: {len(macros)}</li>
-  <li>Events: {len(events)}</li>
-  <li>Signals: {len(signals)}</li>
-  <li>Total links: {len(links)}</li>
+<li>Macros: {len(sections["macros"])}</li>
+<li>Events: {len(sections["events"])}</li>
+<li>Signals: {len(sections["signals"])}</li>
+<li>GUI Elements: {len(sections["gui"])}</li>
+<li>Total Links: {len(links)}</li>
 </ul>
 
-<h2>Confidence Summary</h2>
-<ul>
-  <li>HIGH: {sum(1 for l in links if l[3] == "HIGH")}</li>
-  <li>MEDIUM: {sum(1 for l in links if l[3] == "MEDIUM")}</li>
-  <li>LOW: {sum(1 for l in links if l[3] == "LOW")}</li>
-</ul>
-
-<h2>Macro – Event – Signal Links</h2>
+<h2>Macro ↔ Event ↔ Signal</h2>
 <table>
-<tr>
-  <th>Macro</th>
-  <th>Event</th>
-  <th>Signal</th>
-  <th>Confidence</th>
-  <th>Context</th>
-</tr>
+<tr><th>Macro</th><th>Event</th><th>Signal</th><th>Confidence</th></tr>
 """
-
-    for m, e, s, conf, ctx in links:
-        html += f"""
-<tr class="conf-{conf}">
-  <td>{m}</td>
-  <td>{e}</td>
-  <td>{s}</td>
-  <td>{conf}</td>
-  <td class="small">{ctx}</td>
-</tr>
-"""
+    for l in links:
+        if l["event"] or l["signal"]:
+            html += f"""
+<tr class="{cls(l["confidence"])}">
+<td>{l["macro"]}</td>
+<td>{l["event"]}</td>
+<td>{l["signal"]}</td>
+<td>{l["confidence"]}</td>
+</tr>"""
 
     html += """
 </table>
 
-<h2>Macros</h2>
+<h2>GUI → Macro</h2>
+<table>
+<tr><th>GUI Element</th><th>Macro</th><th>Confidence</th></tr>
 """
-    for m in sorted(macros):
-        html += f"<h3>{m}</h3><ul>"
-        for lm, le, ls, conf, _ in links:
-            if lm == m:
-                html += f"<li>{le} → {ls} ({conf})</li>"
-        html += "</ul>"
+    for l in links:
+        if l["gui"]:
+            html += f"""
+<tr class="{cls(l["confidence"])}">
+<td>{l["gui"]}</td>
+<td>{l["macro"]}</td>
+<td>{l["confidence"]}</td>
+</tr>"""
 
     html += """
-<h2>Events</h2>
-"""
-    for e in sorted(events):
-        html += f"<h3>{e}</h3><ul>"
-        for lm, le, ls, conf, _ in links:
-            if le == e:
-                html += f"<li>{lm} → {ls} ({conf})</li>"
-        html += "</ul>"
-
-    html += """
-<h2>Signals</h2>
-"""
-    for s in sorted(signals):
-        html += f"<h3>{s}</h3><ul>"
-        for lm, le, ls, conf, _ in links:
-            if ls == s:
-                html += f"<li>{lm} / {le} ({conf})</li>"
-        html += "</ul>"
-
-    html += """
-</body>
-</html>
+</table>
+</body></html>
 """
 
-    report_path = output_dir / "sdf_extraction_report.html"
-    report_path.write_text(html, encoding="utf-8")
-    return report_path
+    path = out_dir / "sdf_extraction_report.html"
+    path.write_text(html, encoding="utf-8")
 
-# ---------------- Main ----------------
+# =====================================================================
+# MAIN
+# =====================================================================
 
 def main():
     if len(sys.argv) != 3:
-        print("Usage: python extract.py input.sdf out_dir")
+        print("Usage: python extract_sdf_with_html_report.py <input.sdf> <output_dir>")
         sys.exit(1)
 
     sdf = Path(sys.argv[1])
     out = Path(sys.argv[2])
     out.mkdir(parents=True, exist_ok=True)
 
-    macros_dir = out / "macros"
-    events_dir = out / "events"
-    signals_dir = out / "signals"
-    for d in (macros_dir, events_dir, signals_dir):
-        d.mkdir(parents=True, exist_ok=True)
-
     strings = extract_strings(sdf.read_bytes())
-    macros, events, signals = classify(strings)
+    sections = classify_sections(strings)
+    links = extract_links(strings, sections)
 
-    links = []
+    write_csv(out, links)
+    write_section_markdown(out, sections, sdf.name)
+    generate_html_report(out, sdf.name, sections, links)
 
-    for s in strings:
-        for m in macros:
-            for e in events:
-                for sig in signals:
-                    if m in s or e in s or sig in s:
-                        conf, reason = confidence(s, m, e, sig)
-                        if conf != "LOW":
-                            links.append((m, e, sig, conf, reason))
-
-    # Deduplicate
-    links = list({(m,e,s,c):r for m,e,s,c,r in links}.items())
-
-    # CSV export
-    csv_path = out / "macro_event_signal_links.csv"
-    with csv_path.open("w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        w.writerow(["Macro", "Event", "Signal", "Confidence", "Context"])
-        for (m,e,s,c), reason in links:
-            w.writerow([m, e, s, c, reason])
-
-    # Markdown generation (summary only)
-    for m in macros:
-        used = [(e,s,c) for (mm,e,s,c),_ in links if mm == m]
-        text = f"# Macro: {m}\n\n## Links\n"
-        for e,s,c in used:
-            text += f"- Event: {e}, Signal: {s}, Confidence: {c}\n"
-        (macros_dir / f"{m}.md").write_text(text)
-
-    print("✅ Extraction with confidence complete")
-
-    report = generate_html_report(
-    out,
-    sdf.name,
-    macros,
-    events,
-    signals,
-    links
-)
-
-print(f"📄 HTML report: {report}")
-
+    print("✅ Extraction complete")
+    for k, v in sections.items():
+        print(f"  {k:10}: {len(v)}")
 
 if __name__ == "__main__":
     main()
