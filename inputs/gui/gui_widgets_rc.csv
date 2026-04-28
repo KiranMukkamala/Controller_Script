@@ -1,0 +1,22 @@
+Section,WidgetName,WidgetType,X,Y,Width,Height,Visible,ZIndex,Font,FontSize,TextColor,LabelText,Signal,SignalOrigin,SignalRepresentation,DisplayFormat,Interactable,Notes
+LIN_HECK_3,signal_version,SignalDisplay,37,0,169,31,true,9,Default_bold,30,#FF555F,,@@SYSGLOBAL5@1|LIN,SYSTEM,Enum,"Version: {VALUE}",false,Version indicator
+LIN_HECK_3,label_F1_short_push,Label,0,46,203,22,true,8,Default_bold,16,#00AA00,"F1 short push => open",,SYSTEM,,,false,User instruction label
+LIN_HECK_3,label_F1_long_push,Label,0,66,232,22,true,7,Default_bold,16,#00AA00,"F1 long push => open ice breaking",,SYSTEM,,,false,User instruction label
+LIN_HECK_3,label_F2_short_push,Label,0,88,206,22,true,6,Default_bold,16,#FFAA00,"F2 short push => close",,SYSTEM,,,false,User instruction label
+LIN_HECK_3,label_F2_long_push,Label,0,110,232,22,true,5,Default_bold,16,#FFAA00,"F2 long push => change speed",,SYSTEM,,,false,User instruction label
+LIN_HECK_3,label_F3_push,Label,0,132,232,22,true,4,Default_bold,16,#AA55FF,"F3 => Sleep or long press to Wakeup",,SYSTEM,,,false,User instruction label
+LIN_HECK_3,label_F4_push,Label,0,154,232,22,true,3,Default_bold,16,#550000,"F4 => delivery position",,SYSTEM,,,false,User instruction label
+LIN_HECK_3,label_F5_long_push,Label,0,176,232,22,true,1,Default_bold,16,#FF557F,"F5 long push => change version",,SYSTEM,,,false,User instruction label
+LIN_HECK_3,label_F6_long_push,Label,0,198,232,22,true,2,Default_bold,16,#000000,"F6 long push => initialization",,SYSTEM,,,false,User instruction label
+LIN_HECK_3,signal_controller_status,SignalDisplay,4,10,123,24,true,0,Default_bold,22,#000000,,@@SYSGLOBAL12@1|LIN,SYSTEM,Enum,"Controller: {VALUE}",false,Controller state
+LIN_HECK_3,signal_initialisation_status,SignalDisplay,4,44,142,24,true,2,Default_bold,22,#000000,,@@SYSGLOBAL11@1|LIN,SYSTEM,Enum,"Initialization: {VALUE}",false,Initialization state
+LIN_HECK_3,signal_asil_switch_status,SignalDisplay,4,78,130,24,true,5,Default_bold,22,#000000,,SensorStatusChargingFlapRight@1|LIN,LIN,Enum,"ASIL Switch: {VALUE}",false,Safety signal
+LIN_HECK_3,signal_pto_switch_status,SignalDisplay,4,114,134,24,true,4,Default_bold,22,#000000,,@@SYSDIGIN20@1|LIN,SYSTEM,Enum,"PTO Switch: {VALUE}",false,Input signal
+LIN_HECK_3,signal_sw_hw_caf_status,SignalDisplay,4,184,145,24,true,6,Default_bold,22,#000000,,@@SYSGLOBAL4@1|LIN,SYSTEM,Enum,"SW/HW/CAF: {VALUE}",false,Software/Hardware/Coding state
+LIN_HECK_3,signal_speed_value,SignalDisplay,0,23,92,24,true,4,Default_bold,22,#000000,,ControlModeChargingFlapRight@1|LIN,LIN,Enum,"Speed: {VALUE}",false,Speed display
+LIN_HECK_3,signal_open_close_time,SignalDisplay,0,51,177,24,true,3,Default_bold,22,#000000,,@@SYSGLOBAL13@1|LIN,SYSTEM,Integer,"Open/Close time: {VALUE}",false,Timing information
+LIN_HECK_3,signal_caf_coding_status,SignalDisplay,0,78,133,24,true,1,Default_bold,22,#000000,,CAF_Coding_Pass_Fail@1|LIN,LIN,Enum,"CAF coding: {VALUE}",false,Coding status
+LIN_HECK_3,signal_sw_version,SignalDisplay,0,105,149,24,true,2,Default_bold,22,#000000,,Software_Version_SW3_SW4@1|LIN,LIN,Hex,"Software ver.: {VALUE}",false,Software version
+LIN_HECK_3,signal_hw_version,SignalDisplay,0,131,156,24,true,7,Default_bold,22,#000000,,Hardware_Version_HW3_HW4@1|LIN,LIN,Hex,"Hardware ver.: {VALUE}",false,Hardware version
+LIN_HECK_3,signal_bmw_partnumber,SignalDisplay,0,157,138,24,true,6,Default_bold,22,#000000,,BMW Part number@[1]LIN,LIN,Hex,"BMW Part #: {VALUE}",false,Part number display
+LIN_HECK_3,signal_serial_number,SignalDisplay,0,183,127,24,true,5,Default_bold,22,#000000,,Actuator Serial Number@[1]LIN,LIN,Integer,"Serial Nb#: {VALUE}",false,Actuator serial number display

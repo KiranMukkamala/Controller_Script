@@ -1,0 +1,12 @@
+Device,Condition,Macro,Notes
+BabyLIN-RC,When frame CommErr1KARLIN has error,macro_part_disconnected,From SessionConf Events screenshot
+BabyLIN-RC,When frame CommErr1KARLIN is okay,macro_part_connected,From SessionConf Events screenshot
+BabyLIN-RC,When F1 is pressed,macro_OpenIcebreakingActive,From SessionConf Events screenshot
+BabyLIN-RC,When F2 is pressed,macro_Speed,From SessionConf Events screenshot
+BabyLIN-RC,When F3 is pressed,macro_Sleep_Wakeup,From SessionConf Events screenshot
+BabyLIN-RC,When F6 is pressed,macro_Initialisation,From SessionConf Events screenshot
+BabyLIN-RC,When signal @@SYSDIGIN20 = 1,macro_Open,From SessionConf Events screenshot
+BabyLIN-RC,When signal StatusModeChargingFlapRight = 0 (and @@SYSGLOBAL12 = 1),,Condition only – no macro shown
+BabyLIN-RC,When signal StatusModeChargingFlapRight != 0 (and @@SYSGLOBAL12 = 0),,Condition only – no macro shown
+BabyLIN-RC,When F5 is pressed,macro_change_version,From SessionConf Events screenshot
+BabyLIN-RC,When F4 is pressed,macro_Deliveryposition,From SessionConf Events screenshot

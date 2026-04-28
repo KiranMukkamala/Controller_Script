@@ -1,0 +1,10 @@
+project:
+  name: NA0/RR45
+  description: Charging flap right side – sdf for testing the part
+  owner: E/E Validation
+
+inputs:
+  sdf: BMW_NA0_NB5_RR_Cubing_controller_RCplus_without_SW-HW-CAF_check_V2_NA5.sdf
+  ldf: LDF_EESystem25_24KW33_V46_LIN_HECK_3_V38.ldf
+  events: events_rc.csv
+  gui: gui_widgets_rc.csv

@@ -1,0 +1,747 @@
+/*  QGate V6.2.0 - 11.08.24 00:35:08 MESZ*/ 
+/* ************************************************************************** */
+/*                                                                            */
+/*                    	         BMW AG                                       */
+/*                        All rights reserved                                 */
+/*                                                                            */
+/* ************************************************************************** */
+/*                                                                            */
+/*  Description: LIN Description file                                         */
+/*  Distribution: J24KW33                                                     */
+/*  Konfiguration: EESystem25_24KW33 [46]                                     */
+/*  Konfigurationsstand: G065-26-07-330                                       */
+/*  Bus: LIN_HECK_3 [38]                                                      */
+/*                                                                            */
+/* ************************************************************************** */
+
+LIN_description_file;
+LIN_protocol_version = "2.2";
+LIN_language_version = "2.2";
+LIN_speed =  19.2 kbps;
+Channel_name = "LIN_HECK_3";
+
+Nodes {
+	Master: ZIM_H, 5.0 ms, 0.1 ms;
+	Slaves: AAM_HSRO, LKA_R;
+}
+
+Signals {
+	ALIV_StatusChargingFlapRight: 4, 15, LKA_R, ZIM_H; /* @SignalType(Type=ALIVE-COUNTER) */ 
+	Cabintemp: 8, 255, ZIM_H, AAM_HSRO;
+	CHL_StatusChargingFlapRight: 4, 15, LKA_R, ZIM_H; /* @SignalType(Type=CHECKSUM;Method=DATA-ID-NIBBLE) */ 
+	CommunicationError1LKARLIN: 1, 0, LKA_R, ZIM_H;
+	CommunicationError2LKAR: 2, 0, LKA_R, ZIM_H;
+	CommunicationErrorAAMHSRLIN: 1, 0, AAM_HSRO, ZIM_H;
+	ConfirmedPositionChargingFlapRight: 4, 0, LKA_R, ZIM_H;
+	ControlModeChargingFlapRight: 4, 0, ZIM_H, LKA_R;
+	CRC_StatusChargingFlapRight: 8, 0, LKA_R, ZIM_H; /* @SignalType(Type=CHECKSUM;Method=CRC8;CrcId=388) */ 
+	CtrHomingAAMHSR: 2, 3, ZIM_H, AAM_HSRO;
+	CtrMotormoveAAMHSR: 4, 15, ZIM_H, AAM_HSRO;
+	CtrMovementChargingFlapRight: 4, 0, ZIM_H, LKA_R;
+	CtrPercentPositionAAMHSR: 12, 4095, ZIM_H, AAM_HSRO;
+	CtrPositionAAMHSR: 4, 15, ZIM_H, AAM_HSRO;
+	CtrPowerdegradationAAMHSR: 8, 255, ZIM_H, AAM_HSRO;
+	CtrProfileAAMHSR: 4, 15, ZIM_H, AAM_HSRO;
+	ErrBlockingAAMHSR: 4, 15, AAM_HSRO, ZIM_H;
+	ErrCodingAAMHSR: 4, 15, AAM_HSRO, ZIM_H;
+	ErrCollectiveAAMHSR: 8, 255, AAM_HSRO, ZIM_H;
+	ErrHardwareAAMHSR: 2, 3, AAM_HSRO, ZIM_H;
+	ErrInitAAMHSR: 2, 3, AAM_HSRO, ZIM_H;
+	ErrMotorAAMHSR: 2, 3, AAM_HSRO, ZIM_H;
+	ErrorStatusChargingFlapRight: 8, 0, LKA_R, ZIM_H;
+	ErrPositionAAMHSR: 2, 3, AAM_HSRO, ZIM_H;
+	ErrSensAAMHSR: 4, 15, AAM_HSRO, ZIM_H;
+	ErrSoftwareAAMHSR: 2, 3, AAM_HSRO, ZIM_H;
+	ErrTemperatureAAMHSR: 2, 3, AAM_HSRO, ZIM_H;
+	ErrTimeoutDriveDuration: 2, 3, AAM_HSRO, ZIM_H;
+	ErrTravelDistanceAAMHSR: 2, 3, AAM_HSRO, ZIM_H;
+	ErrVoltageAAMHSR: 2, 3, AAM_HSRO, ZIM_H;
+	FctReverseAAMHSR: 2, 3, ZIM_H, AAM_HSRO;
+	HomingCycleCounterAAMHSR: 8, 255, AAM_HSRO, ZIM_H;
+	InitialisationChargingFlapRight: 4, 0, ZIM_H, LKA_R;
+	KeepPositionChargingFlapRight: 4, 0, ZIM_H, LKA_R;
+	LockStatusChargingFlapRight: 4, 0, LKA_R, ZIM_H;
+	NodeErrorAAMHSR: 2, 3, AAM_HSRO, ZIM_H;
+	OutsideTemp: 8, 255, ZIM_H, AAM_HSRO;
+	OutsideTemperatureRight: 8, 0, ZIM_H, LKA_R;
+	PositionChargingFlapRight: 8, 0, LKA_R, ZIM_H;
+	Radiofreq: 12, 4095, ZIM_H, AAM_HSRO;
+	ReleaseChargingFlapRight: 4, 0, ZIM_H, LKA_R;
+	ReversAngleChargingFlapRight: 8, 0, ZIM_H, LKA_R;
+	SensorStatusChargingFlapRight: 4, 0, LKA_R, ZIM_H;
+	StatPositionChargingFlapRight: 4, 0, LKA_R, ZIM_H;
+	StatusChargingPlugRight: 4, 0, ZIM_H, LKA_R;
+	StatusModeChargingFlapRight: 4, 0, LKA_R, ZIM_H;
+	StFctReverseAAMHSR: 4, 15, AAM_HSRO, ZIM_H;
+	StHomingInitAAMHSR: 4, 15, AAM_HSRO, ZIM_H;
+	StLockingAAMHSR: 2, 3, AAM_HSRO, ZIM_H;
+	StMotormoveAAMHSR: 4, 15, AAM_HSRO, ZIM_H;
+	StPercentPositionAAMHSR: 12, 4095, AAM_HSRO, ZIM_H;
+	StPositionAAMHSR: 4, 15, AAM_HSRO, ZIM_H;
+	StPowerdegradationAAMHSR: 7, 127, AAM_HSRO, ZIM_H;
+	TargetPositionChargingFlapRight: 8, 0, ZIM_H, LKA_R;
+	TemperatureAAMHSR: 8, 255, AAM_HSRO, ZIM_H;
+	VoltageAAMHSR: 8, 255, AAM_HSRO, ZIM_H;
+}
+
+Diagnostic_signals {
+	MasterReqB0: 8, 0;
+	MasterReqB1: 8, 0;
+	MasterReqB2: 8, 0;
+	MasterReqB3: 8, 0;
+	MasterReqB4: 8, 0;
+	MasterReqB5: 8, 0;
+	MasterReqB6: 8, 0;
+	MasterReqB7: 8, 0;
+	SlaveRespB0: 8, 0;
+	SlaveRespB1: 8, 0;
+	SlaveRespB2: 8, 0;
+	SlaveRespB3: 8, 0;
+	SlaveRespB4: 8, 0;
+	SlaveRespB5: 8, 0;
+	SlaveRespB6: 8, 0;
+	SlaveRespB7: 8, 0;
+}
+
+Frames {
+	BRCEnvironmentConditionAAMHSRLIN: 21, ZIM_H, 8{
+		OutsideTemp, 0;
+		Cabintemp, 8;
+		Radiofreq, 16;
+	}
+	CommErr1LKARLIN: 12, LKA_R, 2{
+		CommunicationError1LKARLIN, 0;
+	}
+	ControlAAMHSRLIN: 22, ZIM_H, 8{
+		CtrPercentPositionAAMHSR, 0;
+		FctReverseAAMHSR, 12;
+		CtrHomingAAMHSR, 14;
+		CtrPositionAAMHSR, 16;
+		CtrMotormoveAAMHSR, 20;
+		CtrPowerdegradationAAMHSR, 24;
+		CtrProfileAAMHSR, 32;
+	}
+	ControlChargingFlapRightLIN: 10, ZIM_H, 8{
+		InitialisationChargingFlapRight, 0;
+		CtrMovementChargingFlapRight, 4;
+		ControlModeChargingFlapRight, 8;
+		KeepPositionChargingFlapRight, 12;
+		ReversAngleChargingFlapRight, 16;
+		TargetPositionChargingFlapRight, 24;
+	}
+	ErrorStatusAAMHSRLIN: 23, AAM_HSRO, 8{
+		ErrCollectiveAAMHSR, 0;
+		ErrMotorAAMHSR, 8;
+		ErrSensAAMHSR, 10;
+		ErrVoltageAAMHSR, 14;
+		ErrPositionAAMHSR, 16;
+		ErrTemperatureAAMHSR, 18;
+		ErrCodingAAMHSR, 20;
+		ErrSoftwareAAMHSR, 24;
+		ErrInitAAMHSR, 26;
+		ErrBlockingAAMHSR, 28;
+		ErrHardwareAAMHSR, 32;
+		ErrTimeoutDriveDuration, 34;
+		ErrTravelDistanceAAMHSR, 36;
+	}
+	StatusAAMHSRLIN: 20, AAM_HSRO, 8{
+		HomingCycleCounterAAMHSR, 0;
+		StLockingAAMHSR, 8;
+		StPercentPositionAAMHSR, 10;
+		StPowerdegradationAAMHSR, 22;
+		CommunicationErrorAAMHSRLIN, 29;
+		StHomingInitAAMHSR, 30;
+		StMotormoveAAMHSR, 34;
+		TemperatureAAMHSR, 38;
+		VoltageAAMHSR, 46;
+		NodeErrorAAMHSR, 54;
+		StPositionAAMHSR, 56;
+		StFctReverseAAMHSR, 60;
+	}
+	StatusChargingFlapRightLIN: 11, LKA_R, 8{
+		CRC_StatusChargingFlapRight, 0;
+		ALIV_StatusChargingFlapRight, 8;
+		CHL_StatusChargingFlapRight, 12;
+		PositionChargingFlapRight, 16;
+		StatPositionChargingFlapRight, 24;
+		LockStatusChargingFlapRight, 28;
+		SensorStatusChargingFlapRight, 32;
+		StatusModeChargingFlapRight, 36;
+		ErrorStatusChargingFlapRight, 40;
+		ConfirmedPositionChargingFlapRight, 48;
+		CommunicationError2LKAR, 62;
+	}
+	VehicleDataChargingFlapRightLIN: 1, ZIM_H, 8{
+		ReleaseChargingFlapRight, 0;
+		StatusChargingPlugRight, 4;
+		OutsideTemperatureRight, 8;
+	}
+}
+
+Sporadic_frames {
+	Sporadic_Frame_Holder_LIN_HECK_3 : ControlChargingFlapRightLIN, ControlAAMHSRLIN;
+}
+
+
+Diagnostic_frames {
+	MasterReq: 60 {
+		MasterReqB0, 0;
+		MasterReqB1, 8;
+		MasterReqB2, 16;
+		MasterReqB3, 24;
+		MasterReqB4, 32;
+		MasterReqB5, 40;
+		MasterReqB6, 48;
+		MasterReqB7, 56;
+	}
+	SlaveResp: 61 {
+		SlaveRespB0, 0;
+		SlaveRespB1, 8;
+		SlaveRespB2, 16;
+		SlaveRespB3, 24;
+		SlaveRespB4, 32;
+		SlaveRespB5, 40;
+		SlaveRespB6, 48;
+		SlaveRespB7, 56;
+	}
+}
+
+Node_attributes{
+		AAM_HSRO {
+			LIN_protocol = "2.2";
+			configured_NAD = 0x02;
+			initial_NAD = 0x02;
+			product_id = 0x7FFF,0xFFFF,0x00;
+			response_error = CommunicationErrorAAMHSRLIN;
+			P2_min = 50.0 ms;
+			ST_min = 0.0 ms;
+			configurable_frames {
+						StatusAAMHSRLIN;
+						BRCEnvironmentConditionAAMHSRLIN;
+						ControlAAMHSRLIN;
+						ErrorStatusAAMHSRLIN;
+						}
+		}
+		LKA_R {
+			LIN_protocol = "2.2";
+			configured_NAD = 0x01;
+			initial_NAD = 0x01;
+			product_id = 0x7FFF,0xFFFF,0x00;
+			response_error = CommunicationError1LKARLIN;
+			P2_min = 50.0 ms;
+			ST_min = 0.0 ms;
+			configurable_frames {
+						VehicleDataChargingFlapRightLIN;
+						StatusChargingFlapRightLIN;
+						ControlChargingFlapRightLIN;
+						CommErr1LKARLIN;
+						}
+		}
+	}
+
+Schedule_tables {
+		DIAG_19200_5 { 
+			MasterReq delay 10.0 ms;
+			SlaveResp delay 10.0 ms;
+		}
+		DIAG_RESP_19200_5 { 
+			SlaveResp delay 10.0 ms;
+		}
+		DIAG_RQ_19200_5 { 
+			MasterReq delay 10.0 ms;
+		}
+		ERR_ST_AAM { 
+			ErrorStatusAAMHSRLIN delay 20.0 ms;
+		}
+		INIT_AAM_HSRO { 
+			AssignFrameIdRange { AAM_HSRO , 0, 20, 85, 214, 151 }  delay 10.0 ms;
+			SaveConfiguration { AAM_HSRO }  delay 10.0 ms;
+		}
+		INIT_LKA_R { 
+			AssignFrameIdRange { LKA_R , 0, 193, 139, 202, 76 }  delay 10.0 ms;
+			SaveConfiguration { LKA_R }  delay 10.0 ms;
+		}
+		RUN_MAIN { 
+			Sporadic_Frame_Holder_LIN_HECK_3 delay 10.0 ms;
+			BRCEnvironmentConditionAAMHSRLIN delay 10.0 ms;
+			CommErr1LKARLIN delay 20.0 ms;
+			StatusChargingFlapRightLIN delay 10.0 ms;
+			Sporadic_Frame_Holder_LIN_HECK_3 delay 40.0 ms;
+			StatusAAMHSRLIN delay 10.0 ms;
+			Sporadic_Frame_Holder_LIN_HECK_3 delay 40.0 ms;
+			StatusChargingFlapRightLIN delay 10.0 ms;
+			Sporadic_Frame_Holder_LIN_HECK_3 delay 30.0 ms;
+			VehicleDataChargingFlapRightLIN delay 20.0 ms;
+		}
+	}
+
+Signal_encoding_types {
+		Aliv_4_INIT {
+				physical_value, 0 , 14 , 1 , 0;
+				logical_value, 15, "Signal ungültig"; /* @ErrorValue */
+		}
+		CabintempClass {
+				physical_value, 0 , 140 , 1 , -10 , "°C";
+				logical_value, 253, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 254, "Funktion_meldet_Fehler";
+				logical_value, 255, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		CHL_4_INIT {
+				physical_value, 1 , 14 , 1 , 0;
+				logical_value, 15, "Signal ungültig"; /* @ErrorValue */
+		}
+		CommunicationErrorClassLIN {
+				logical_value, 0, "No_Error";
+				logical_value, 1, "Error_active";
+		}
+		CommunicationErrorLKAClass {
+				logical_value, 0, "no_Error";
+				logical_value, 1, "Communication_Error";
+				logical_value, 3, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		CommunicationErrorLKAClassLIN {
+				logical_value, 0, "no_Error";
+				logical_value, 1, "Communication_Error";
+		}
+		ConfirmedPositionChargingClass {
+				logical_value, 0, "UNKNOWN";
+				logical_value, 1, "FLAP_CLOSED_CONFIRMED";
+				logical_value, 2, "INTERMEDIATE_POSITION";
+				logical_value, 3, "FULLY_OPEN";
+				logical_value, 4, "MOUNTING_POSITION";
+				logical_value, 13, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 14, "Funktion_meldet_Fehler";
+				logical_value, 15, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		ControlModeChargingFlapClass {
+				logical_value, 0, "SPEED_1_SLOW";
+				logical_value, 1, "SPEED_2_NORMAL";
+				logical_value, 2, "SPEED_3_FAST";
+				logical_value, 13, "Functional_interface_not_available";
+				logical_value, 14, "Function_not_available_reports_error";
+				logical_value, 15, "Signal_unfilled"; /* @ErrorValue */
+		}
+		ControlMovementChargingFlapClass {
+				logical_value, 0, "NO_REQUEST";
+				logical_value, 1, "CLOSE_CHARGING_FLAP";
+				logical_value, 2, "OPEN_CHARGING_FLAP";
+				logical_value, 3, "STOP_MOVEMENT";
+				logical_value, 4, "VARIABLE_CLOSED_POSITION";
+				logical_value, 5, "MOUNTING_POSITION";
+				logical_value, 6, "EMERGENCY_CLOSE";
+				logical_value, 7, "EMERGENCY_OPEN";
+				logical_value, 8, "INTERMEDIATE_POSITION_WITH_TARGET_VALUE";
+				logical_value, 13, "Functional_interface_not_available";
+				logical_value, 14, "Function_not_available_reports_error";
+				logical_value, 15, "Signal_unfilled"; /* @ErrorValue */
+		}
+		CRC_8_INIT {
+				physical_value, 0 , 255 , 1 , 0;
+		}
+		CtrHomingAAMClass {
+				logical_value, 0, "Start_Homing";
+				logical_value, 1, "Stop_Homing";
+				logical_value, 2, "Start_Init";
+				logical_value, 3, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		CtrMotormoveAAMClass {
+				logical_value, 0, "drive_in";
+				logical_value, 1, "drive_out";
+				logical_value, 2, "stop";
+				logical_value, 3, "reverse";
+				logical_value, 13, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 14, "Funktion_meldet_Fehler";
+				logical_value, 15, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		CtrPercentPositionAAMClass {
+				physical_value, 0 , 1200 , 0.1 , -10 , "%";
+				logical_value, 4093, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 4094, "Funktion_meldet_Fehler";
+				logical_value, 4095, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		CtrPositionAAMHSRClass {
+				logical_value, 0, "Position_1";
+				logical_value, 1, "Position_2";
+				logical_value, 2, "Position_3";
+				logical_value, 3, "Position_4";
+				logical_value, 4, "Position_5";
+				logical_value, 5, "Position_6";
+				logical_value, 6, "Position_7";
+				logical_value, 7, "Position_8";
+				logical_value, 10, "Position_Can_Be_Ignored";
+				logical_value, 13, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 14, "Funktion_meldet_Fehler";
+				logical_value, 15, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		CtrPowerdegradationAAMClass {
+				physical_value, 0 , 100 , 1 , 0 , "%";
+				logical_value, 253, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 254, "Funktion_meldet_Fehler";
+				logical_value, 255, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		CtrProfileAAMHSRClass {
+				logical_value, 0, "profile_normal";
+				logical_value, 1, "profile_synchrone_movement";
+				logical_value, 2, "profile_reserve1";
+				logical_value, 3, "profile_reserve2";
+				logical_value, 13, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 14, "Funktion_meldet_Fehler";
+				logical_value, 15, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		ErrBlockingAAMClass {
+				logical_value, 0, "No_Error";
+				logical_value, 1, "Blockage_Reason1";
+				logical_value, 2, "Blockage_Reason2";
+				logical_value, 3, "Blockage_Reason3";
+				logical_value, 4, "Blockage_Reason4";
+				logical_value, 5, "Blockage_Reason5";
+				logical_value, 13, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 14, "Funktion_meldet_Fehler";
+				logical_value, 15, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		ErrCodingAAMClass {
+				logical_value, 0, "No_Error";
+				logical_value, 1, "Configuration_Not_Correct";
+				logical_value, 2, "Slave_Not_Coded";
+				logical_value, 3, "Coding_Data_CRC_Not_Ok";
+				logical_value, 13, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 14, "Funktion_meldet_Fehler";
+				logical_value, 15, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		ErrCollectiveAAMClass {
+				physical_value, 0 , 255 , 1 , 0 , "Decodierung wird von LIN nicht unterstützt siehe NK";
+		}
+		ErrHardwareAAMClass {
+				logical_value, 0, "No_Error";
+				logical_value, 1, "Motordriver_Error";
+				logical_value, 2, "Temperature_Sensor_Error";
+				logical_value, 3, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		ErrInitAAMClass {
+				logical_value, 0, "Initialized";
+				logical_value, 1, "Not_Initialized";
+				logical_value, 3, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		ErrMotorAAMClass {
+				logical_value, 0, "No_Error";
+				logical_value, 1, "Motor_Openload";
+				logical_value, 2, "Motor_Short_To_Plus_Or_Ground";
+				logical_value, 3, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		ErrorStatusChargingFlapClass {
+				logical_value, 0, "NO_ERROR";
+				logical_value, 1, "CODING_ERROR";
+				logical_value, 2, "PLAY_PROTECTION";
+				logical_value, 3, "TEMPERATURE_THRESHOLD_1";
+				logical_value, 4, "TEMPERATURE_THRESHOLD_2";
+				logical_value, 5, "INITIALIZATION_LOST";
+				logical_value, 6, "NORMALIZATION_LOST";
+				logical_value, 7, "HARDWARE_ERROR_SENSOR";
+				logical_value, 8, "HARDWARE_ERROR_MOTOR";
+				logical_value, 9, "HARDWARE_ERROR_KINEMATICS";
+				logical_value, 10, "INIT_NOT_SUCCESSFUL_TIMEOUT";
+				logical_value, 11, "INIT_NOT_SUCCESSFUL_CONDITIONS";
+				logical_value, 12, "OUT_OF_VOLTAGE_RANGE";
+				logical_value, 13, "CLOSED_POSITION_SENS_SHORT_TO_GND";
+				logical_value, 14, "CLOSED_POSITION_SENS_SHORT_TO_POS_OR_OL";
+				logical_value, 15, "CLOSED_POSITION_SENS_STUCK";
+				logical_value, 16, "KINEMATICS_STIFF";
+				logical_value, 17, "KINEMATICS_TRAVEL_IMPLAUSIBLE";
+				logical_value, 253, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 254, "Funktion_meldet_Fehler";
+				logical_value, 255, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		ErrPositionAAMClass {
+				logical_value, 0, "No_Error";
+				logical_value, 1, "Position_Unknown";
+				logical_value, 3, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		ErrSensAAMClass {
+				physical_value, 0 , 15 , 1 , 0 , "Decodierung wird von LIN nicht unterstützt siehe NK";
+		}
+		ErrSoftwareAAMClass {
+				logical_value, 0, "No_Error";
+				logical_value, 1, "Watchdog_Reset";
+				logical_value, 2, "Stack_Overflow";
+				logical_value, 3, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		ErrTemperatureAAMClass {
+				logical_value, 0, "No_Error";
+				logical_value, 1, "Overtemperature";
+				logical_value, 2, "Undertemperature";
+				logical_value, 3, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		ErrTimeoutDriveDuration {
+				logical_value, 0, "No_Error";
+				logical_value, 1, "Timeout_Error";
+				logical_value, 3, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		ErrTravelDistanceAAMHSR {
+				logical_value, 0, "No_Error";
+				logical_value, 1, "TravelDistance_Error";
+				logical_value, 3, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		ErrVoltageAAMClass {
+				logical_value, 0, "No_Error";
+				logical_value, 1, "Overvoltage";
+				logical_value, 2, "Undervoltage";
+				logical_value, 3, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		FctReverseAAMHSRClass {
+				logical_value, 0, "Reversing_Deactivated";
+				logical_value, 1, "Reversing_Activated";
+				logical_value, 3, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		HomingCycleCounterAAMClass {
+				physical_value, 0 , 200 , 1 , 0;
+				logical_value, 253, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 254, "Funktion_meldet_Fehler";
+				logical_value, 255, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		InitialisationChargingFlapClass {
+				logical_value, 0, "IDLE_MODE";
+				logical_value, 1, "INITIALIZATION_STOP";
+				logical_value, 2, "INITIALIZATION_WITHOUT_FORCE_LIMIT";
+				logical_value, 3, "INITIALIZATION_WITH_FORCE_LIMIT";
+				logical_value, 4, "MANUAL_TEACHING";
+				logical_value, 13, "Functional_interface_not_available";
+				logical_value, 14, "Function_not_available_reports_error";
+				logical_value, 15, "Signal_unfilled"; /* @ErrorValue */
+		}
+		KeepPositionChargingFlapClass {
+				logical_value, 0, "KEEP_POSITION_FUNCTION_IS_NOT_ACTIVE";
+				logical_value, 1, "KEEP_POSITION_FUNCTION_IS_ACTIVE";
+				logical_value, 13, "Functional_interface_not_available";
+				logical_value, 14, "Function_not_available_reports_error";
+				logical_value, 15, "Signal_unfilled"; /* @ErrorValue */
+		}
+		LockStatusChargingFlapClass {
+				logical_value, 0, "CHARGING_FLAP_LEFT_UNLOCKED";
+				logical_value, 1, "CHARGING_FLAP_LEFT_LOCKED";
+				logical_value, 13, "Functional_interface_not_available";
+				logical_value, 14, "Function_not_available_reports_error";
+				logical_value, 15, "Signal_unfilled"; /* @ErrorValue */
+		}
+			NodeErrorAAMClass {
+				logical_value, 0, "No_Error";
+				logical_value, 1, "Error_active";
+				logical_value, 2, "Error_Status_Change";
+				logical_value, 3, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		OutsideTempClass {
+				physical_value, 0 , 130 , 1 , -40 , "°C";
+				logical_value, 253, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 254, "Funktion_meldet_Fehler";
+				logical_value, 255, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		PositionChargingFlapClass {
+				physical_value, 0 , 200 , 1 , -50 , "%";
+				logical_value, 253, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 254, "Funktion_meldet_Fehler";
+				logical_value, 255, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		RadiofreqClass {
+				physical_value, 0 , 1896 , 1 , 150 , "kHz";
+				logical_value, 4093, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 4094, "Funktion_meldet_Fehler";
+				logical_value, 4095, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		ReleaseChargingFlapClass {
+				logical_value, 0, "NO_RELEASE";
+				logical_value, 1, "CLOSING_ALLOWED";
+				logical_value, 2, "OPENING_ALLOWED";
+				logical_value, 3, "CLOSING_OR_OPENING_ALLOWED";
+				logical_value, 13, "Functional_interface_not_available";
+				logical_value, 14, "Function_not_available_reports_error";
+				logical_value, 15, "Signal_unfilled"; /* @ErrorValue */
+		}
+		ReversAngleChargingFlapClass {
+				physical_value, 0 , 100 , 1 , 0 , "%";
+				logical_value, 253, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 254, "Funktion_meldet_Fehler";
+				logical_value, 255, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		SensorStatusChargingFlapClass {
+				logical_value, 0, "CLOSED_POSITION_SENSOR_VALUE_FALSE";
+				logical_value, 1, "CLOSED_POSITION_SENSOR_VALUE_TRUE";
+				logical_value, 13, "Functional_interface_not_available";
+				logical_value, 14, "Function_not_available_reports_error";
+				logical_value, 15, "Signal_unfilled"; /* @ErrorValue */
+		}
+		StatusChargingPlugClass {
+				logical_value, 0, "CHARGING_PLUG_NOT_PLUGGED_INTO_THE_LEFT_CHARGING_SOCKET";
+				logical_value, 1, "CHARGING_PLUG_PLUGGED_INTO_THE_LEFT_CHARGING_SOCKET";
+				logical_value, 2, "CHARGING_PLUG_STATUS_UNKNOWN";
+				logical_value, 13, "Functional_interface_not_available";
+				logical_value, 14, "Function_not_available_reports_error";
+				logical_value, 15, "Signal_unfilled"; /* @ErrorValue */
+		}
+		StatusModeChargingFlapClass {
+				logical_value, 0, "IDLE_MODE";
+				logical_value, 1, "CHARGING_FLAP_CLOSING";
+				logical_value, 2, "CHARGING_FLAP_OPENING";
+				logical_value, 3, "CHARGING_FLAP_REVERSING";
+				logical_value, 4, "BLOCKAGE_DETECTED";
+				logical_value, 5, "POSITION_PROOFING";
+				logical_value, 6, "UNBLOCKING_RUNNING";
+				logical_value, 7, "TIP_TO_RUN_ACTIVE_OPEN";
+				logical_value, 8, "INITIALIZATION_ACTIVE";
+				logical_value, 9, "VARIABLE_CLOSING_ACTIVE";
+				logical_value, 10, "TIP_TO_RUN_ACTIVE_CLOSE";
+				logical_value, 13, "Functional_interface_not_available";
+				logical_value, 14, "Function_not_available_reports_error";
+				logical_value, 15, "Signal_unfilled"; /* @ErrorValue */
+		}
+		StatusPositionChargingFlapRightClass {
+				logical_value, 0, "POSITION_CONFIRMED";
+				logical_value, 1, "POSITION_NOT_CONFIRMED";
+				logical_value, 2, "POSITION_UNKNOWN_NOT_CLOSED";
+				logical_value, 13, "Functional_interface_not_available";
+				logical_value, 14, "Function_not_available_reports_error";
+				logical_value, 15, "Signal_unfilled"; /* @ErrorValue */
+		}
+		StFctReverseAAMClass {
+				logical_value, 0, "Reversing_Deacitvated";
+				logical_value, 1, "Reversing_Acitvated";
+				logical_value, 15, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		StHomingInitAAMClass {
+				logical_value, 0, "No_Homing_Init";
+				logical_value, 1, "Homing_Active";
+				logical_value, 2, "Initialization_Active";
+				logical_value, 3, "Initialization_Sucessfull";
+				logical_value, 4, "Homing_Successful";
+				logical_value, 5, "Homing_With_Failures_Or_Aborted";
+				logical_value, 6, "Initialization_With_Failures_Or_Aborted";
+				logical_value, 13, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 14, "Funktion_meldet_Fehler";
+				logical_value, 15, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		StLockingAAMClass {
+				logical_value, 0, "Unlocked";
+				logical_value, 1, "Temporarly_Locked";
+				logical_value, 2, "Locked";
+				logical_value, 3, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		StMotormoveAAMClass {
+				logical_value, 0, "Driving_In";
+				logical_value, 1, "Driving_Out";
+				logical_value, 2, "No_Movement";
+				logical_value, 3, "stoped_customized_movement_not_possible";
+				logical_value, 4, "Reverse";
+				logical_value, 13, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 14, "Funktion_meldet_Fehler";
+				logical_value, 15, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		StPercentPositionAAMClass {
+				physical_value, 0 , 1200 , 0.1 , -10 , "%";
+				logical_value, 4093, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 4094, "Funktion_meldet_Fehler";
+				logical_value, 4095, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		StPositionAAMHSRClass {
+				logical_value, 0, "Position_1_reached";
+				logical_value, 1, "Position_2_reached";
+				logical_value, 2, "Position_3_reached";
+				logical_value, 3, "Position_4_reached";
+				logical_value, 4, "Position_5_reached";
+				logical_value, 5, "Position_6_reached";
+				logical_value, 6, "Position_7_reached";
+				logical_value, 7, "Position_8_reached";
+				logical_value, 8, "Position_unknown";
+				logical_value, 9, "Intermediate_position";
+				logical_value, 13, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 14, "Funktion_meldet_Fehler";
+				logical_value, 15, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		StPowerdegradationAAMClass {
+				physical_value, 0 , 100 , 1 , 0 , "%";
+				logical_value, 125, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 126, "Funktion_meldet_Fehler";
+				logical_value, 127, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		TargetPositionChargingFlapClass {
+				physical_value, 0 , 100 , 1 , 0 , "%";
+				logical_value, 253, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 254, "Funktion_meldet_Fehler";
+				logical_value, 255, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		TemperatureAAMClass {
+				physical_value, 0 , 200 , 1 , -50 , "°C";
+				logical_value, 253, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 254, "Funktion_meldet_Fehler";
+				logical_value, 255, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+		TEMP_40_85_SigEncodClass {
+				physical_value, 0 , 250 , 0.5 , -40 , "°C";
+				logical_value, 253, "Functional_interface_not_available";
+				logical_value, 254, "Function_not_available_reports_error";
+				logical_value, 255, "Signal_unfilled"; /* @ErrorValue */
+		}
+		VoltageAAMClass {
+				physical_value, 0 , 250 , 0.1 , 0 , "V";
+				logical_value, 253, "Funktionsschnittstelle_ist_nicht_verfuegbar";
+				logical_value, 254, "Funktion_meldet_Fehler";
+				logical_value, 255, "Signal_unbefuellt"; /* @ErrorValue */
+		}
+	}
+
+Signal_representation {
+		Aliv_4_INIT: ALIV_StatusChargingFlapRight;
+		CabintempClass: Cabintemp;
+		CHL_4_INIT: CHL_StatusChargingFlapRight;
+		CommunicationErrorClassLIN: CommunicationErrorAAMHSRLIN;
+		CommunicationErrorLKAClass: CommunicationError2LKAR;
+		CommunicationErrorLKAClassLIN: CommunicationError1LKARLIN;
+		ConfirmedPositionChargingClass: ConfirmedPositionChargingFlapRight;
+		ControlModeChargingFlapClass: ControlModeChargingFlapRight;
+		ControlMovementChargingFlapClass: CtrMovementChargingFlapRight;
+		CRC_8_INIT: CRC_StatusChargingFlapRight;
+		CtrHomingAAMClass: CtrHomingAAMHSR;
+		CtrMotormoveAAMClass: CtrMotormoveAAMHSR;
+		CtrPercentPositionAAMClass: CtrPercentPositionAAMHSR;
+		CtrPositionAAMHSRClass: CtrPositionAAMHSR;
+		CtrPowerdegradationAAMClass: CtrPowerdegradationAAMHSR;
+		CtrProfileAAMHSRClass: CtrProfileAAMHSR;
+		ErrBlockingAAMClass: ErrBlockingAAMHSR;
+		ErrCodingAAMClass: ErrCodingAAMHSR;
+		ErrCollectiveAAMClass: ErrCollectiveAAMHSR;
+		ErrHardwareAAMClass: ErrHardwareAAMHSR;
+		ErrInitAAMClass: ErrInitAAMHSR;
+		ErrMotorAAMClass: ErrMotorAAMHSR;
+		ErrorStatusChargingFlapClass: ErrorStatusChargingFlapRight;
+		ErrPositionAAMClass: ErrPositionAAMHSR;
+		ErrSensAAMClass: ErrSensAAMHSR;
+		ErrSoftwareAAMClass: ErrSoftwareAAMHSR;
+		ErrTemperatureAAMClass: ErrTemperatureAAMHSR;
+		ErrTimeoutDriveDuration: ErrTimeoutDriveDuration;
+		ErrTravelDistanceAAMHSR: ErrTravelDistanceAAMHSR;
+		ErrVoltageAAMClass: ErrVoltageAAMHSR;
+		FctReverseAAMHSRClass: FctReverseAAMHSR;
+		HomingCycleCounterAAMClass: HomingCycleCounterAAMHSR;
+		InitialisationChargingFlapClass: InitialisationChargingFlapRight;
+		KeepPositionChargingFlapClass: KeepPositionChargingFlapRight;
+		LockStatusChargingFlapClass: LockStatusChargingFlapRight;
+		NodeErrorAAMClass: NodeErrorAAMHSR;
+		OutsideTempClass: OutsideTemp;
+		PositionChargingFlapClass: PositionChargingFlapRight;
+		RadiofreqClass: Radiofreq;
+		ReleaseChargingFlapClass: ReleaseChargingFlapRight;
+		ReversAngleChargingFlapClass: ReversAngleChargingFlapRight;
+		SensorStatusChargingFlapClass: SensorStatusChargingFlapRight;
+		StatusChargingPlugClass: StatusChargingPlugRight;
+		StatusModeChargingFlapClass: StatusModeChargingFlapRight;
+		StatusPositionChargingFlapRightClass: StatPositionChargingFlapRight;
+		StFctReverseAAMClass: StFctReverseAAMHSR;
+		StHomingInitAAMClass: StHomingInitAAMHSR;
+		StLockingAAMClass: StLockingAAMHSR;
+		StMotormoveAAMClass: StMotormoveAAMHSR;
+		StPercentPositionAAMClass: StPercentPositionAAMHSR;
+		StPositionAAMHSRClass: StPositionAAMHSR;
+		StPowerdegradationAAMClass: StPowerdegradationAAMHSR;
+		TargetPositionChargingFlapClass: TargetPositionChargingFlapRight;
+		TemperatureAAMClass: TemperatureAAMHSR;
+		TEMP_40_85_SigEncodClass: OutsideTemperatureRight;
+		VoltageAAMClass: VoltageAAMHSR;
+	}
+
