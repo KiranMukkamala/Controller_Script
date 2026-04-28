@@ -1,0 +1,20 @@
+MacroName,TriggerType,TriggerSource,Notes
+macro_Start_Software,Autostart,Session start,Initial system setup
+macro_Open,Event,F1 pressed,BabyLIN-RC open command
+macro_OpenIcebreakingActive,Event,F1 pressed,Open with ice-breaking active
+macro_Close,MacroCall,Called by macro_Speed,Speed-related closure
+macro_Speed,Event,F2 pressed,Speed mode toggle
+macro_Sleep_Wakeup,Event,F3 pressed,Sleep / Wakeup control
+macro_Deliveryposition,Event,F4 pressed,Delivery position
+macro_change_version,Event,F5 pressed,Change software variant
+macro_Initialisation,Event,F6 pressed,Initialisation procedure
+macro_part_disconnected,Event,LIN communication error,Handling LIN disconnect
+macro_part_connected,Event,LIN communication restored,Handling LIN reconnect
+macro_Time_measurement,MacroCall,Called by macro_Open / macro_Close,Internal timing helper
+macro_Parameter,MacroCall,Called by multiple macros,Shared parameter setup
+macro_Identity_Check_Service_B2,MacroCall,Called by macro_part_connected,Identity verification
+macro_CAF_Data_Write,MacroCall,Called by macro_part_connected,CAF coding sequence
+macro_production_flag_read,Service,Diagnostic request,Read production flag
+macro_production_flag_write,Service,Diagnostic request,Write production flag
+macro_flash_locking_flag_read,Service,Diagnostic request,Read flash locking flag
+macro_Weatherprotection,MacroCall,Called internally,Weather protection positioning
