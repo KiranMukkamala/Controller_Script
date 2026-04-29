@@ -69,6 +69,14 @@ if errorlevel 1 goto step_error
 
 echo [OK] All validation checks passed
 
+echo [CHECKSUM] Generating input checksums...
+python tools\validate\generate_input_checksums.py
+if errorlevel 1 goto step_error
+
+echo [CHECKSUM] Validating input checksums...
+python tools\validate\validate_input_checksums.py
+if errorlevel 1 goto step_error
+
 REM ------------------------------------------------------------
 REM Final verification report
 REM ------------------------------------------------------------
