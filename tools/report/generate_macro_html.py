@@ -1,4 +1,4 @@
-import csv 
+import csv
 from pathlib import Path
 from collections import defaultdict
 from datetime import datetime
@@ -9,9 +9,11 @@ LINKS_FILE = "inputs/macros/macro_event_links.csv"
 OUT_ROOT = Path("outputs/html")
 MACRO_DIR = OUT_ROOT / "macros"
 
+
 def load_csv(path):
     with open(path, newline="", encoding="utf-8") as f:
         return list(csv.DictReader(f))
+
 
 def main():
     steps = load_csv(STEPS_FILE)
@@ -27,15 +29,15 @@ def main():
             f"{l['TriggerType']}: {l['TriggerSource']}"
         )
 
-    OUT_ROOT.mkdir(parents=True, exist_ok=True)
     MACRO_DIR.mkdir(parents=True, exist_ok=True)
-
-    generated = []
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # -------- Generate one HTML page per macro --------
     for macro, rows in steps_by_macro.items():
-        rows = sorted(rows, key=lambda r: int(r["StepNumber"]) if r["StepNumber"].isdigit() else 9999)
+        rows = sorted(
+            rows,
+            key=lambda r: int(r["StepNumber"])
+            if r["StepNumber"].isdigit() else 9999
+        )
 
         html = f"""<!DOCTYPE html>
 <html>
@@ -43,11 +45,10 @@ def main():
 <meta charset="UTF-8">
 <title>{macro}</title>
 <style>
-body {{ font-family: Arial; }}
+body {{ font-family: Arial, sans-serif; }}
 table {{ border-collapse: collapse; width: 100%; }}
 th, td {{ border: 1px solid #999; padding: 6px; }}
 th {{ background: #f0f0f0; }}
-.label {{ color: #006; font-weight: bold; }}
 .disabled {{ color: #999; font-style: italic; }}
 </style>
 </head>
@@ -59,8 +60,9 @@ th {{ background: #f0f0f0; }}
 <h2>Trigger(s)</h2>
 <ul>
 """
-        for trig in trigger_map.get(macro, ["(not externally triggered)"]):
-            html += f"<li>{trig}</li>\n"
+
+        for trig in trigger_map.get(macro, ["(Internal / no direct trigger)"]):
+            html += f"<li>{trig}</li>"
 
         html += """
 </ul>
@@ -79,12 +81,11 @@ th {{ background: #f0f0f0; }}
 """
 
         for r in rows:
-            step = r["StepNumber"]
-            row_class = "disabled" if r["Command"].startswith("Disabled") else ""
+            cls = "disabled" if r["Command"].startswith("Disabled") else ""
             html += f"""
-<tr id="step-{step}" class="{row_class}">
-<td>{step}</td>
-<td class="label">{r['Label']}</td>
+<tr id="step-{r['StepNumber']}" class="{cls}">
+<td>{r['StepNumber']}</td>
+<td>{r['Label']}</td>
 <td>{r['Condition']}</td>
 <td>{r['Command']}</td>
 <td>{r['Value']}</td>
@@ -96,46 +97,16 @@ th {{ background: #f0f0f0; }}
         html += """
 </table>
 
-<p><a href="../index.html">← Back to index</a></p>
+<p><a href="../sessionconf_report.html">Back to SessionConf Report</a></p>
 </body>
 </html>
 """
 
         out_file = MACRO_DIR / f"{macro}.html"
         out_file.write_text(html, encoding="utf-8")
-        generated.append(macro)
 
-    # -------- Generate index.html --------
-    index = f"""<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>SessionConf Macro Index</title>
-<style>
-body {{ font-family: Arial; }}
-</style>
-</head>
-<body>
+    print(f"✅ Generated {len(steps_by_macro)} macro HTML pages")
 
-<h1>SessionConf Macro Documentation</h1>
-<p><b>Generated:</b> {now}</p>
-
-<ul>
-"""
-
-    for macro in sorted(generated):
-        index += f'<li><a href="macros/{macro}.html">{macro}</a></li>\n'
-
-    index += """
-</ul>
-
-</body>
-</html>
-"""
-
-    (OUT_ROOT / "index.html").write_text(index, encoding="utf-8")
-
-    print(f"✅ Generated {len(generated)} macro HTML pages")
 
 if __name__ == "__main__":
     main()

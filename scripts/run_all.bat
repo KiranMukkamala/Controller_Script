@@ -1,13 +1,17 @@
 @echo off
 REM ============================================================
-REM SessionConf Documentation Toolchain (DEBUG MODE)
+REM SessionConf Documentation Toolchain
+REM Baseline-based checksum validation enabled
 REM ============================================================
 
+REM ------------------------------------------------------------
+REM Always start in script directory
+REM ------------------------------------------------------------
 cd /d %~dp0
 echo Script directory: %CD%
 
 REM ------------------------------------------------------------
-REM Find repository root
+REM Find repository root (contains inputs\sdf)
 REM ------------------------------------------------------------
 :find_root
 if exist inputs\sdf goto root_found
@@ -34,31 +38,48 @@ echo.
 REM ------------------------------------------------------------
 REM Pipeline steps
 REM ------------------------------------------------------------
-echo [1/6] Extracting macros from SDF
+
+echo [1/8] Extracting macros from SDF
 python tools\extract_macros\extract_macros_from_sdf.py
 if errorlevel 1 goto step_error
 
-echo [2/6] Validating Events vs Macros
+echo [2/8] Validating Events vs Macros
 python tools\validate\validate_events_vs_macros.py
 if errorlevel 1 goto step_error
 
-echo [3/6] Validating GUI vs LDF
+echo [3/8] Validating GUI vs LDF
 python tools\validate\validate_gui_vs_ldf.py
 if errorlevel 1 goto step_error
 
-echo [4/6] Generating overview HTML report
+REM ------------------------------------------------------------
+REM Baseline-based checksum handling
+REM ------------------------------------------------------------
+
+echo [4/8] Computing current input checksums (SDF/LDF)
+python tools\validate\compute_current_checksums.py
+if errorlevel 1 goto step_error
+
+echo [5/8] Validating against baseline checksums
+python tools\validate\validate_and_update_input_checksums.py --accept
+if errorlevel 1 goto step_error
+
+REM ------------------------------------------------------------
+REM HTML generation
+REM ------------------------------------------------------------
+
+echo [6/8] Generating overview HTML report
 python tools\report\generate_html_report.py
 if errorlevel 1 goto step_error
 
-echo [5/6] Generating macro HTML pages
+echo [7/8] Generating per-macro HTML pages
 python tools\report\generate_macro_html.py
 if errorlevel 1 goto step_error
 
 REM ------------------------------------------------------------
-REM Validation checks
+REM Validation & verification
 REM ------------------------------------------------------------
-echo.
-echo [CHECK] Running macro consistency checks...
+
+echo [8/8] Running macro consistency checks
 python tools\validate\check_macro_consistency.py
 if errorlevel 1 goto step_error
 
@@ -67,19 +88,6 @@ echo [CHECK] Running HTML macro link checks...
 python tools\validate\check_macro_html_links.py
 if errorlevel 1 goto step_error
 
-echo [OK] All validation checks passed
-
-echo [CHECKSUM] Generating input checksums...
-python tools\validate\generate_input_checksums.py
-if errorlevel 1 goto step_error
-
-echo [CHECKSUM] Validating input checksums...
-python tools\validate\validate_input_checksums.py
-if errorlevel 1 goto step_error
-
-REM ------------------------------------------------------------
-REM Final verification report
-REM ------------------------------------------------------------
 echo.
 echo [REPORT] Generating verification report...
 python tools\report\generate_verification_report.py

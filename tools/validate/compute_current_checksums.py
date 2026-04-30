@@ -5,7 +5,7 @@ import sys
 
 SDF_DIR = Path("inputs/sdf")
 LDF_DIR = Path("inputs/ldf")
-OUT_FILE = Path("outputs/checksums/input_checksums.csv")
+OUT_FILE = Path("outputs/checksums/current_input_checksums.csv")
 
 def sha256(path: Path) -> str:
     h = hashlib.sha256()
@@ -15,16 +15,15 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 def main():
-    if not SDF_DIR.exists():
-        print("❌ inputs/sdf not found")
-        sys.exit(1)
-    if not LDF_DIR.exists():
-        print("❌ inputs/ldf not found")
+    rows = []
+
+    if not SDF_DIR.exists() or not LDF_DIR.exists():
+        print("❌ inputs/sdf or inputs/ldf missing")
         sys.exit(1)
 
-    rows = []
     for p in sorted(SDF_DIR.glob("*.sdf")):
         rows.append(("SDF", p.name, sha256(p)))
+
     for p in sorted(LDF_DIR.glob("*.ldf")):
         rows.append(("LDF", p.name, sha256(p)))
 
@@ -38,7 +37,7 @@ def main():
         writer.writerow(["Type", "Filename", "SHA256"])
         writer.writerows(rows)
 
-    print(f"✅ Input checksums written to {OUT_FILE}")
+    print(f"✅ Current input checksums written to {OUT_FILE}")
 
 if __name__ == "__main__":
     main()
